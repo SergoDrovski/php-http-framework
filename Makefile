@@ -10,5 +10,7 @@ docker-down-clear:
 docker-build-pull:
 	docker-compose build --pull
 
-test:
-    docker-compose run --rm php-cli ./vendor/bin/phpunit
+install:
+	docker-compose run --rm php-cli composer install
+
+
