@@ -8,7 +8,7 @@ class RouteCollection
 
     public function any($name, $pattern, $handler, array $tokens = []): void
     {
-        $this->routes[] = new Route($name, $pattern, $handler, [], $tokens);
+        $this->routes[] = new Route($name, $pattern, $handler, ['GET'], $tokens);
     }
 
     public function get($name, $pattern, $handler, array $tokens = []): void
