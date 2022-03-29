@@ -18,9 +18,9 @@ $request = ServerRequestFactory::fromGlobals();
 
 $routes = new RouteCollection();
 
-//$routes->get('home', '/index', function (){ return 'Hello!';});
-$routes->post('home', '/change', function ($request){ return 'Create Data';});
-$routes->any('home', '/', function (){ return 'About any';});
+//$routes->get('home', '/index/blog/{token}', function (){ return 'Hello!';}, ['token' => '']);
+//$routes->post('home', '/change', function ($request){ return 'Create Data';});
+$routes->any('home', '/index/{id}', function (){ return 'About any';}, ['id' => '\d+']);
 
 $router = new Router($routes);
 

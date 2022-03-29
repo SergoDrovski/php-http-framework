@@ -22,13 +22,13 @@ class Router
                 continue;
             }
 
-            return 'yes route';
+            $pattern = preg_replace_callback('/\{([^\}]+)\}/', function ($matches) use ($route) {
+            $argument = $matches[1];
+            $replace = $route->tokens[$argument] ?? '[^}]+';
+            return '(?P<' . $argument . '>' . $replace . ')';
+            }, $route->pattern);
 
-//            $pattern = preg_replace_callback('~\{([^\}]+)\}~', function ($matches) use ($route) {
-//                $argument = $matches[1];
-//                $replace = $route->tokens[$argument] ?? '[^}]+';
-//                return '(?P<' . $argument . '>' . $replace . ')';
-//            }, $route->parattern);
+
 //            if (preg_match($pattern, $request->getUri()->getPath(), $matches)) {
 //                return new Result(
 //                  $route->name,
@@ -37,10 +37,10 @@ class Router
 //                );
 //            }
         }
-        return 'no route';
+        return 'rout not found';
 //        throw new RequestNotMatchedException($request);
     }
-//
+
 //    public function generate($name, array $params = []) : string
 //    {
 //

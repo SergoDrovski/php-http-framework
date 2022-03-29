@@ -8,14 +8,14 @@ class Route
     public $pattern;
     public $handler;
     public $methods;
-    public $token;
+    public $tokens;
 
-    public function  __construct($name, $pattern, $handler, array $methods, array $token= [])
+    public function  __construct($name, $pattern, $handler, array $methods, array $tokens = [])
     {
         $this->name = $name;
         $this->pattern = $pattern;
         $this->handler = $handler;
         $this->methods = $methods;
-        $this->token = $token;
+        $this->tokens = $tokens;
     }
 }
