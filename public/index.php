@@ -2,38 +2,49 @@
 
 declare(strict_types=1);
 
+use Framework\Http\Router\Exception\RequestNotMatchedException;
 use Framework\Http\Router\RouteCollection;
 use Framework\Http\Router\Router;
 use Laminas\Diactoros\ServerRequestFactory;
 use Laminas\Diactoros\Response\HtmlResponse;
+use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
+use Psr\Http\Message\ServerRequestInterface;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-// Initialization
-
-$request = ServerRequestFactory::fromGlobals();
-
-// Action------------------------------------------------------
-
+// Инициализация маршрутов
 $routes = new RouteCollection();
 
-//$routes->get('home', '/index/blog/{token}', function (){ return 'Hello!';}, ['token' => '']);
-//$routes->post('home', '/change', function ($request){ return 'Create Data';});
-$routes->any('home', '/index/{id}', function (){ return 'About any';}, ['id' => '\d+']);
+
+$routes->get('home', '/index', function (){
+    return new HtmlResponse('<h1>Hello, bro!</h1>');
+});
+
+$routes->get('blog', '/blog/{id}', function (ServerRequestInterface $request){
+    $id = $request->getAttribute('id');
+    return new JsonResponse(['id'=> $id, 'title' => 'something text']);
+}, ['id' => '\d+']);
 
 $router = new Router($routes);
 
-$result = $router->match($request);
+// запуск программы
+$request = ServerRequestFactory::fromGlobals();
 
-echo "<pre>";
-var_dump($result);
-exit();
 
-//$response = (new HtmlResponse($body, 200,))
-//    ->withHeader('X-developer', 'ok');
+try {
+    $result = $router->match($request);
+    foreach ($result->getAttributes() as $attribute => $value){
+        $request = $request->withAttribute($attribute, $value);
+    }
+    $action = $result->getHandler();
+    $response = $action($request);
+} catch (RequestNotMatchedException $exception){
+    $response = new HtmlResponse('<h1>Not found!</h1>', 404);
+}
 
-// Sending
 
-//$emitter = new SapiEmitter();
-//$emitter->emit($response);
+// Отправка
+
+$emitter = new SapiEmitter();
+$emitter->emit($response);
