@@ -10,7 +10,7 @@ class RoutNotFoundException extends \LogicException
 
     public function __construct($name, array $params)
     {
-        parent::__construct("Route {$name} not found");
+        parent::__construct("RegexpRoute {$name} not found");
         $this->name = $name;
         $this->params = $params;
 

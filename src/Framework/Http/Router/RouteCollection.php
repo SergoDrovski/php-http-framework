@@ -2,23 +2,36 @@
 
 namespace Framework\Http\Router;
 
+use Framework\Http\Router\Route\RegexpRoute;
+use Framework\Http\Router\Route\RouteInterface;
+
 class RouteCollection
 {
     private array $routes = [];
 
-    public function any($name, $pattern, $handler, array $tokens = []): void
+    public function addRoute(RouteInterface $route)
     {
-        $this->routes[] = new Route($name, $pattern, $handler, ['GET', 'POST', 'PATCH'], $tokens);
+        $this->routes[] = $route;
     }
 
-    public function get($name, $pattern, $handler, array $tokens = []): void
+    public function add($name, $pattern, $handler, array $methods, array $tokens = [])
     {
-        $this->routes[] = new Route($name, $pattern, $handler, ['GET'], $tokens);
+        $this->addRoute(new RegexpRoute($name, $pattern, $handler, $methods, $tokens));
     }
 
-    public function post($name, $pattern, $handler, array $tokens = []): void
+    public function any($name, $pattern, $handler, array $tokens = [])
     {
-        $this->routes[] = new Route($name, $pattern, $handler, ['POST'], $tokens);
+        $this->addRoute(new RegexpRoute($name, $pattern, $handler, ['GET', 'POST', 'PATCH'], $tokens));
+    }
+
+    public function get($name, $pattern, $handler, array $tokens = [])
+    {
+        $this->addRoute(new RegexpRoute($name, $pattern, $handler, ['GET'], $tokens));
+    }
+
+    public function post($name, $pattern, $handler, array $tokens = [])
+    {
+        $this->addRoute(new RegexpRoute($name, $pattern, $handler, ['POST'], $tokens));
     }
 
     /**
