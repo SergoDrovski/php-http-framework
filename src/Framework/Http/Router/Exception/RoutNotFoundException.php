@@ -5,12 +5,12 @@ namespace Framework\Http\Router\Exception;
 
 class RoutNotFoundException extends \LogicException
 {
-    private $name;
-    private $params;
+    private mixed $name;
+    private array $params;
 
-    public function __construct($name, array $params)
+    public function __construct($name, array $params, $previous = null)
     {
-        parent::__construct("RegexpRoute {$name} not found");
+        parent::__construct("RegexpRoute {$name} not found", $previous);
         $this->name = $name;
         $this->params = $params;
 
@@ -19,7 +19,7 @@ class RoutNotFoundException extends \LogicException
     /**
      * @return mixed
      */
-    public function getName()
+    public function getName(): mixed
     {
         return $this->name;
     }
@@ -27,7 +27,7 @@ class RoutNotFoundException extends \LogicException
     /**
      * @return array
      */
-    public function getParams()
+    public function getParams(): array
     {
         return $this->params;
     }

@@ -4,9 +4,9 @@ namespace Framework\Http\Router;
 
 class Result
 {
-    private $name;
-    private $handler;
-    private $attributes;
+    private mixed $name;
+    private mixed $handler;
+    private array $attributes;
 
 
     public function  __construct($name, $handler, array $attributes)
@@ -28,7 +28,7 @@ class Result
     /**
      * @return mixed
      */
-    public function getHandler()
+    public function getHandler(): mixed
     {
         return $this->handler;
     }

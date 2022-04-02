@@ -23,7 +23,8 @@
         "php": "^8.0",
         "psr/http-message": "^1.0",
         "laminas/laminas-diactoros": "^2.8",
-        "laminas/laminas-httphandlerrunner": "^2.1"
+        "laminas/laminas-httphandlerrunner": "^2.1",
+        "aura/router": "^3.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
