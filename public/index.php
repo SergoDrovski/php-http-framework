@@ -14,6 +14,7 @@ use Psr\Http\Message\ServerRequestInterface;
 require __DIR__ . '/../vendor/autoload.php';
 
 // Инициализация маршрутов
+
 $routes = new RouteCollection();
 
 
@@ -29,6 +30,7 @@ $routes->get('blog', '/blog/{id}', function (ServerRequestInterface $request){
 $router = new Router($routes);
 
 // запуск программы
+
 $request = ServerRequestFactory::fromGlobals();
 
 
