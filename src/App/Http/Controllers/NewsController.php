@@ -14,5 +14,4 @@ class NewsController
         return new HtmlResponse("<h1>id = {$id}</h1>");
     }
 
-
 }
