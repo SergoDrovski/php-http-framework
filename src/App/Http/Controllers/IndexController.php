@@ -9,7 +9,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class IndexController
 {
-    public function index(ServerRequestInterface $request): Response
+    public function __invoke(ServerRequestInterface $request): Response
     {
         $response = new Response();
         $response->getBody()->write("<h1>Hello</h1>");

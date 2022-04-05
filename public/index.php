@@ -22,23 +22,20 @@ $routes = $aura->getMap();
 
 // маршруты
 
-$routes->get('index', '/{id}', function (ServerRequestInterface $request) {
-    $profiler = new ProfilerMiddleware();
-    $action = [new (App\Http\Controllers\IndexController::class),'index'];
-    return $profiler($request, function (ServerRequestInterface $request) use ($action){
-        return  $action($request);
-    });
-});
+//$routes->get('index', '/{id}', function (ServerRequestInterface $request) {
+//    $profiler = new ProfilerMiddleware();
+//    $action = [new (App\Http\Controllers\IndexController::class),'index'];
+//    return $profiler($request, function (ServerRequestInterface $request) use ($action){
+//        return  $action($request);
+//    });
+//});
 
-//echo "<pre>";
-//var_dump(new (App\Http\Controllers\NewsController::class . ':index'));
-//exit();
 
 $routes->get('index', '/{id}', [
-    ProfilerMiddleware::class,
-    App\Http\Controllers\NewsController::class . '@index',
+    App\Http\Middleware\ProfilerMiddleware::class,
+    App\Http\Controllers\NewsController::class,
 ]);
-$routes->get('blog', '/blog/{id}', [App\Http\Controllers\BlogController::class, 'index'])->tokens(['id' => '\d+']);
+$routes->get('blog', '/blog/{id}', App\Http\Controllers\BlogController::class)->tokens(['id' => '\d+']);
 
 
 $router = new AuraRouterAdapter($aura);
@@ -58,16 +55,18 @@ try {
     }
 
     $handler = $result->getHandler();
+    $pipeline->pipe($resolver->resolve($handler));
 
     echo "<pre>";
-    var_dump($resolver->resolve($handler));
+    var_dump($pipeline);
     exit();
 
-//    $pipeline->pipe($resolver->resolve($handler));
-
-
 } catch (RequestNotMatchedException $exception){}
-$response = $pipeline($request, new Middleware\NotFoundHandler());
+$response = $pipeline($request, new App\Http\Middleware\NotFoundHandler());
+
+//    echo "<pre>";
+//    var_dump($response);
+//    exit();
 
 // Отправка
 $emitter = new SapiEmitter();

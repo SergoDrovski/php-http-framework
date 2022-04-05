@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class NewsController
 {
-    public function index(ServerRequestInterface $request): HtmlResponse
+    public function __invoke(ServerRequestInterface $request): HtmlResponse
     {
         $id = (int) $request->getAttribute('id');
         return new HtmlResponse("<h1>id = {$id}</h1>");

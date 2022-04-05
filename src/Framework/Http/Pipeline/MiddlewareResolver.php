@@ -6,7 +6,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class MiddlewareResolver
 {
-    public function resolve($handler)
+    public function resolve($handler): callable
     {
         if(is_array($handler)){
             return $this->createPipe($handler);
@@ -22,11 +22,10 @@ class MiddlewareResolver
         return $handler;
     }
 
-    private function createPipe(array $handlers)
+    private function createPipe(array $handlers): Pipeline
     {
         $pipeline = new Pipeline();
         foreach ($handlers as $handler) {
-
             $pipeline->pipe($this->resolve($handler));
         }
         return $pipeline;
