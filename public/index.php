@@ -5,6 +5,8 @@ declare(strict_types=1);
 use App\Http\Middleware\ProfilerMiddleware;
 use Aura\Router\RouterContainer;
 use Framework\Http\ActionResolver;
+use Framework\Http\Pipeline\MiddlewareResolver;
+use Framework\Http\Pipeline\Pipeline;
 use Framework\Http\Router\AuraRouterAdapter;
 use Framework\Http\Router\Exception\RequestNotMatchedException;
 use Laminas\Diactoros\ServerRequestFactory;
@@ -28,13 +30,22 @@ $routes->get('index', '/{id}', function (ServerRequestInterface $request) {
     });
 });
 
+//echo "<pre>";
+//var_dump(new (App\Http\Controllers\NewsController::class . ':index'));
+//exit();
 
-//$routes->get('index', '/{id}', [App\Http\Controllers\NewsController::class, 'index']);
+$routes->get('index', '/{id}', [
+    ProfilerMiddleware::class,
+    App\Http\Controllers\NewsController::class . '@index',
+]);
 $routes->get('blog', '/blog/{id}', [App\Http\Controllers\BlogController::class, 'index'])->tokens(['id' => '\d+']);
 
 
 $router = new AuraRouterAdapter($aura);
-$resolver = new ActionResolver();
+
+
+$resolver = new MiddlewareResolver();
+$pipeline = new Pipeline();
 
 // запуск программы
 $request = ServerRequestFactory::fromGlobals();
@@ -45,19 +56,18 @@ try {
     foreach ($result->getAttributes() as $attribute => $value){
         $request = $request->withAttribute($attribute, $value);
     }
-    $action = $resolver->resolve($result->getHandler());
+
+    $handler = $result->getHandler();
+
+    echo "<pre>";
+    var_dump($resolver->resolve($handler));
+    exit();
+
+//    $pipeline->pipe($resolver->resolve($handler));
 
 
-
-    $response = $action($request);
-
-//    echo "<pre>";
-//    var_dump($response);
-//    exit();
-} catch (RequestNotMatchedException $exception){
-    $response = new HtmlResponse('<h1>Not found!</h1>', 404);
-}
-
+} catch (RequestNotMatchedException $exception){}
+$response = $pipeline($request, new Middleware\NotFoundHandler());
 
 // Отправка
 $emitter = new SapiEmitter();
