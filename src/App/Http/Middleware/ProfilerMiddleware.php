@@ -15,7 +15,6 @@ class ProfilerMiddleware
 
        $stop = microtime(true);
 
-
        return $response->withHeader("X-Time", $stop - $start);
 
    }

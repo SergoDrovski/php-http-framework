@@ -7,7 +7,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class Pipeline
 {
-    private $queue;
+    private \SplQueue $queue;
 
     public function __construct()
     {
@@ -16,11 +16,19 @@ class Pipeline
 
     public function __invoke(ServerRequestInterface $request, callable $next): ResponseInterface
     {
-        $delegate = new Next(clone $this->queue, $next);
-        return $delegate($request);
+
+        if($this->queue->isEmpty()){
+            return $next($request);
+        }
+
+        $middleware = $this->queue->dequeue();
+
+        return $middleware($request,  function (ServerRequestInterface $request) use ($next){
+            return $this($request, $next);
+        });
     }
 
-    public function pipe(callable $middleware)
+    public function pipe($middleware)
     {
         $this->queue->enqueue($middleware);
     }

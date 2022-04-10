@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 
 use Laminas\Diactoros\Response\HtmlResponse;
 use Psr\Http\Message\ServerRequestInterface;
+use Laminas\Diactoros\Response;
 
 class NewsController
 {
-    public function __invoke(ServerRequestInterface $request): HtmlResponse
+    public function __invoke(ServerRequestInterface $request)
     {
-        $id = (int) $request->getAttribute('id');
-        return new HtmlResponse("<h1>id = {$id}</h1>");
+
+        return new HtmlResponse("<h1>Hello</h1>");
     }
 
 }

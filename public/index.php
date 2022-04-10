@@ -33,7 +33,7 @@ $routes = $aura->getMap();
 
 $routes->get('index', '/{id}', [
     App\Http\Middleware\ProfilerMiddleware::class,
-    App\Http\Controllers\NewsController::class,
+    App\Http\Controllers\IndexController::class,
 ]);
 $routes->get('blog', '/blog/{id}', App\Http\Controllers\BlogController::class)->tokens(['id' => '\d+']);
 
@@ -57,16 +57,12 @@ try {
     $handler = $result->getHandler();
     $pipeline->pipe($resolver->resolve($handler));
 
-    echo "<pre>";
-    var_dump($pipeline);
-    exit();
 
 } catch (RequestNotMatchedException $exception){}
 $response = $pipeline($request, new App\Http\Middleware\NotFoundHandler());
 
-//    echo "<pre>";
-//    var_dump($response);
-//    exit();
+
+
 
 // Отправка
 $emitter = new SapiEmitter();
