@@ -3,7 +3,7 @@
 namespace Framework\Http\Router;
 
 use Framework\Http\Router\Exception\RequestNotMatchedException;
-use Framework\Http\Router\Exception\RoutNotFoundException;
+use Framework\Http\Router\Exception\UknoweMiddlewareExcaption;
 use Psr\Http\Message\ServerRequestInterface;
 
 
@@ -20,8 +20,8 @@ interface RouterInterface
     /**
      * @param  $name
      * @param  array $params
-     * @throws RoutNotFoundException
      * @return string
+     * @throws UknoweMiddlewareExcaption
      */
     public function generate($name, array $params = []) : string;
 

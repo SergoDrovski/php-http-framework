@@ -11,12 +11,15 @@ class Next
 
     private $queue;
     private $next;
+    private $response;
 
 
-    public function __construct(SplQueue $queue, callable $next)
+
+    public function __construct(SplQueue $queue, ResponseInterface $response, callable $next)
     {
         $this->queue = $queue;
         $this->next = $next;
+        $this->response = $response;
     }
 
     public function __invoke(ServerRequestInterface $request): ResponseInterface
@@ -27,7 +30,7 @@ class Next
         $middleware = $this->queue->dequeue();
 
 
-        return $middleware($request,  function (ServerRequestInterface $request){
+        return $middleware($request, $this->response, function (ServerRequestInterface $request){
                 return $this($request);
         });
     }

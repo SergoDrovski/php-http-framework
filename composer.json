@@ -24,7 +24,9 @@
         "psr/http-message": "^1.0",
         "laminas/laminas-diactoros": "^2.8",
         "laminas/laminas-httphandlerrunner": "^2.1",
-        "aura/router": "^3.2"
+        "aura/router": "^3.2",
+        "psr/http-server-handler": "^1.0",
+        "psr/http-server-middleware": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"

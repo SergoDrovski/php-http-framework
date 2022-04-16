@@ -41,7 +41,7 @@ $app->pipe(new DispatchMiddleware($resolver));
 
 // запуск программы
 $request = ServerRequestFactory::fromGlobals();
-$response = $app->run($request);
+$response = $app->run($request, new Laminas\Diactoros\Response());
 
 // Отправка
 $emitter = new SapiEmitter();

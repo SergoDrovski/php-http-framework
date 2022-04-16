@@ -15,13 +15,17 @@ class DispatchMiddleware
         $this->resolver = $resolver;
     }
 
-    public function __invoke(ServerRequestInterface $request, callable $next)
+    public function __invoke(ServerRequestInterface $request, $response, callable $next)
     {
         $result = $request->getAttribute(Result::class);
         if (!$result) {
             return $next($request);
         }
+
         $middleware = $this->resolver->resolve($result->getHandler());
-        return $middleware($request, $next);
+
+//        var_dump($result->getHandler());
+//        exit();
+        return $middleware($request, $response, $next);
     }
 }
