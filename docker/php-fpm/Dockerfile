@@ -10,3 +10,6 @@ RUN mv $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 COPY php/conf.d /usr/local/ect/php/conf.d
 
 WORKDIR /app
+
+COPY docker-php-entrypoint.sh /usr/local/bin/docker-php-entrypoint
+RUN chmod +x /usr/local/bin/docker-php-entrypoint
