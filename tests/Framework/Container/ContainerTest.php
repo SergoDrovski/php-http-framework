@@ -13,17 +13,17 @@ class ContainerTest extends TestCase
     {
         $container = new Container();
 
-        $container->set($name = 'name', $value = '5');
-        self::assertEquals($value, $container->get($name));
+        $container->set($name1 = 'name', $value1 = '5');
+        self::assertEquals($value1, $container->get($name1));
 
-        $container->set($name = 'name', $value = true);
-        self::assertEquals($value, $container->get($name));
+        $container->set($name2 = 'name', $value2 = true);
+        self::assertEquals($value2, $container->get($name2));
 
-        $container->set($name = 'name', $value = ['array']);
-        self::assertEquals($value, $container->get($name));
+        $container->set($name3 = 'name', $value3 = ['array']);
+        self::assertEquals($value3, $container->get($name3));
 
-        $container->set($name = 'name', $value = new \stdClass());
-        self::assertEquals($value, $container->get($name));
+        $container->set($name4 = 'name', $value4 = new \stdClass());
+        self::assertEquals($value4, $container->get($name4));
     }
 
     public function testNotFound(): void
@@ -46,6 +46,22 @@ class ContainerTest extends TestCase
         self::assertNotNull($container->get('name'));
         self::assertInstanceOf(\stdClass::class, $container->get('name'));
 
+    }
+
+    public function testSingleton()
+    {
+        $container = new Container();
+
+        $container->set($name = 'name', function (){
+            return new \stdClass();
+        });
+
+        $value1 = $container->get($name);
+        $value2 = $container->get($name);
+
+        self::assertNotNull($value1);
+        self::assertNotNull($value2);
+        self::assertSame($value1, $value2);
     }
 
 }

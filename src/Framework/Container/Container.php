@@ -2,7 +2,6 @@
 
 namespace Framework\Container;
 
-use phpDocumentor\Reflection\Types\Callable_;
 
 class Container
 {
@@ -18,14 +17,22 @@ class Container
         if(!array_key_exists($id, $this->definitions)){
             throw new ServiceNotFoundException("Undefined parameter {$id}");
         }
-        if (is_callable($result = $this->definitions[$id])){
-            return  $this->result[$id] = $result();
+
+        $result = $this->definitions[$id];
+
+        if (is_callable($result)){
+            $this->result[$id] = $result();
+            return $this->result[$id];
         }
-        return $this->result[$id] = $result;
+        $this->result[$id] = $result;
+        return $this->result[$id];
     }
 
     public function set($id, $value)
     {
+        if(array_key_exists($id, $this->result)){
+            unset($this->result[$id]);
+        }
         $this->definitions[$id] = $value;
     }
 
