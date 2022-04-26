@@ -21,7 +21,7 @@ class Container
         $result = $this->definitions[$id];
 
         if (is_callable($result)){
-            $this->result[$id] = $result();
+            $this->result[$id] = $result($this);
             return $this->result[$id];
         }
         $this->result[$id] = $result;
