@@ -25,4 +25,6 @@ interface RouterInterface
      */
     public function generate($name, array $params = []) : string;
 
+    public function addRoute(RouteDate $date) : void;
+
 }

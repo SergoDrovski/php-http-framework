@@ -3,6 +3,7 @@
 namespace Framework\Http\Router;
 
 use Aura\Router\Exception\RouteNotFound;
+use Aura\Router\Route;
 use Aura\Router\RouterContainer;
 use Framework\Http\Router\Exception\RequestNotMatchedException;
 use Framework\Http\Router\Exception\UknoweMiddlewareExcaption;
@@ -36,5 +37,39 @@ class AuraRouterAdapter implements RouterInterface
         } catch (RouteNotFound $exception) {
             throw new UknoweMiddlewareExcaption($name, $params, $exception);
         }
+    }
+
+    /**
+     * @throws \Aura\Router\Exception\RouteAlreadyExists
+     * @throws \Aura\Router\Exception\ImmutableProperty
+     */
+    public function addRoute(RouteDate $date) : void
+    {
+        $map = $this->aura->getMap();
+        $rout = new Route();
+
+        $rout->name($date->name);
+        $rout->path($date->path);
+        $rout->handler($date->handler);
+
+        if($date->methods){
+            $rout->allows($date->methods);
+        }
+
+        foreach ($date->options as $key => $value){
+            switch ($key) {
+                case 'tokens':
+                    $rout->tokens($value);
+                    break;
+                case 'wildcard':
+                    $rout->wildcard($value);
+                    break;
+                case 'defaults':
+                    $rout->defaults($value);
+                    break;
+            }
+        }
+
+        $map->addRoute($rout);
     }
 }
